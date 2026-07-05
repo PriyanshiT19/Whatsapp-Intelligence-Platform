@@ -6,7 +6,7 @@ and Interactive Visualizations.
 
 ## Features
 - Chat parsing and data extraction
-- Feature engineering and preprocessing  
+- Feature engineering and preprocessing
 - Exploratory Data Analysis
 - NLP: Sentiment Analysis, Topic Modeling
 - ML: Activity Prediction
@@ -14,6 +14,7 @@ and Interactive Visualizations.
 
 ## Project Structure
 
+```
 whatsapp-intelligence-platform/
 ├── src/
 │   ├── parser.py          # WhatsApp chat parser
@@ -27,6 +28,7 @@ whatsapp-intelligence-platform/
 ├── data/sample/           # Sample chat data
 ├── app/                   # Streamlit application
 └── requirements.txt
+```
 
 ## Tech Stack
 - Python 3.11
@@ -36,5 +38,18 @@ whatsapp-intelligence-platform/
 - Plotly, Matplotlib
 - Streamlit
 
+## Setup
+
+```bash
+# Clone the repo
+git clone https://github.com/PriyanshiT19/Whatsapp-Intelligence-Platform.git
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run the app
+streamlit run app/main.py
+```
+
 ## Status
-In Development — Phase 1 Complete (Parser + Preprocessor)
+🚧 In Development — Phase 1 Complete (Parser + Preprocessor)

@@ -14,15 +14,12 @@ import pandas as pd
 
 
 # ── Constants ──────────────────────────────────────────────────────────────
-# Keeping patterns as constants means if WhatsApp
-# changes their format, we fix it in ONE place only
-
 TIMESTAMP_PATTERN = (
-    r"(\d{1,2}/\d{1,2}/\d{2,4})"   # Group 1: Date
-    r",\s"                           # Comma + whitespace
-    r"(\d{1,2}:\d{2}\s[AaPp][Mm])" # Group 2: Time + AM/PM
-    r"\s-\s"                         # Separator
-    r"(.*)"                          # Group 3: Rest of line
+    r"(\d{1,2}/\d{1,2}/\d{2,4})"          # Group 1: Date
+    r",\s"                                  # Comma + whitespace
+    r"(\d{1,2}:\d{2}(?:\s?[AaPp][Mm])?)"  # Group 2: Time (AM/PM optional)
+    r"\s-\s"                                # Separator
+    r"(.*)"                                 # Group 3: Rest of line
 )
 
 MEDIA_PATTERN   = "<Media omitted>"
@@ -41,6 +38,7 @@ def is_new_message(line):
     
     Example:
         "3/14/23, 9:42 AM - Alice: Hi" → True
+        "19/08/25, 13:23 - Alice: Hi"  → True
         "which continues here"          → False
     """
     return bool(re.match(TIMESTAMP_PATTERN, line))
@@ -56,6 +54,9 @@ def extract_parts(line):
     Example:
         "3/14/23, 9:42 AM - Alice: Hi"
         → ("3/14/23", "9:42 AM", "Alice: Hi")
+        
+        "19/08/25, 13:23 - Alice: Hi"
+        → ("19/08/25", "13:23", "Alice: Hi")
     """
     match = re.match(TIMESTAMP_PATTERN, line)
     if match:
@@ -122,17 +123,13 @@ def parse_whatsapp_chat(file_path):
     """
     Parse a WhatsApp exported chat .txt file.
     
-    This is the main function you call from anywhere
-    in the project. All other functions in this file
-    are helpers for this one.
-    
     Parameters:
         file_path (str): Path to WhatsApp .txt export
     
     Returns:
         pd.DataFrame with columns:
-            date         → string date "3/14/23"
-            time         → string time "9:42 AM"
+            date         → string date
+            time         → string time
             sender       → person who sent the message
             message      → full message text
             message_type → normal/media/deleted/system/group_event
@@ -217,16 +214,11 @@ def parse_whatsapp_chat(file_path):
 
 
 # ── Quick Test ─────────────────────────────────────────────────────────────
-# This block runs ONLY when you run parser.py directly
-# It does NOT run when you import parser in another file
-# This is a Python best practice
-
 if __name__ == "__main__":
     import os
     
-    # Test with sample file
     sample_path = os.path.join(
-        os.path.dirname(__file__),  # src/ folder
+        os.path.dirname(__file__),
         "..", "data", "sample", "sample_chat.txt"
     )
     
@@ -239,4 +231,4 @@ if __name__ == "__main__":
     print(f"\nMessage types:")
     print(df['message_type'].value_counts())
     print(f"\nFirst 3 rows:")
-    print(df.head(3)) 
+    print(df.head(3))
